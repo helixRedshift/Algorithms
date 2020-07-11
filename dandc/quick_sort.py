@@ -1,48 +1,36 @@
 a=input("Enter numbers in the array: ")
 a=[int(x) for x in a.split()]
 
-def insert_pivot(a):
-    pivot = a[-1]
-    indx_pivot = len(a) - 1
-    i = 0
-    j = len(a) - 2
+def insert_pivot(a, low, high):
+    pivot = a[high]
+    indx_pivot = high
+    i = low
+    j = high - 1
 
-    while i <= j:
-        
-        print("array: ", a)
-        while a[i] < pivot:
+    while i<=j:
+        if a[i] < pivot:
             i += 1
-        while a[j] > pivot:
+            continue
+        if a[j] > pivot:
             j -= 1
-        print("i and j :", i, j)
-        if (i < j) and a[i] > pivot and a[j] < pivot:
-            print("ai and aj: ", a[i], a[j])
-            tmp = a[j]
-            a[j] = a[i]
-            a[i] = tmp
+            continue
+        if a[i] > pivot and a[j] < pivot:
+            a[j], a[i] = a[i], a[j]
             i += 1
             j -= 1
-            print("i and j :", i, j)
         
-    #print("array: ", a)
-    if i > j:
-        tmp = pivot
-        a[indx_pivot] = a[i]
-        a[i] = tmp
-        print("array: ", a)
-        return i
+    a[indx_pivot], a[i] = a[i], a[indx_pivot]
+    return i
 
-def quick_sort(a):
-    if len(a) == 1 or len(a) == 0:
-        return a
-    indx_pivot = insert_pivot(a)
-    print("index: ", indx_pivot)
-    print("quick sort array full: ", a)
-    print("quick sort array: ", a[:indx_pivot])
-    quick_sort(a[:indx_pivot])
-    quick_sort(a[indx_pivot:]) 
-
+def quick_sort(a, low, high):
+    if low < high:
+        indx_pivot = insert_pivot(a, low, high)
+        quick_sort(a, low, indx_pivot-1)
+        quick_sort(a, indx_pivot+1, high) 
+    
     return a
 
-res = quick_sort(a)
+low = 0
+high = len(a) - 1
+res = quick_sort(a, low, high)
 print(res)
